@@ -34,11 +34,31 @@ while (true)
                 warrior.Attack();
                 break;
             }
-            case Patterns.AbstractFactory:
+            case Patterns.Builder:
             {
+                Console.WriteLine("""
+                                  We have created a builder pattern, which can stack multiple properties and features based on conditions required
+                                  In this scenario, we are building a customisable loan.
+                                  """);
+                LoanBuilder loanBuilder = new LoanBuilder();
+                Loan mortgageLoan = loanBuilder
+                    .SetAmount(550000)
+                    .SetInterestRate(InterestRateType.Fixed, 39.9)
+                    .SetTerm(30, 0)
+                    .SetType(LoanType.Mortgage)
+                    .Build();
+                loanBuilder = new LoanBuilder();
+                Loan carLoan = loanBuilder
+                    .SetAmount(25000)
+                    .SetInterestRate(InterestRateType.Variable, 15.0)
+                    .SetTerm(5, 0)
+                    .SetType(LoanType.Car)
+                    .Build();
+                mortgageLoan.Summarise();
+                carLoan.Summarise();
                 break;
             }
-            case Patterns.Builder:
+            case Patterns.AbstractFactory:
             {
                 break;
             }
