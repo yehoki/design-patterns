@@ -23,17 +23,36 @@ while (true)
     if (input.ToLower() == "m")
     {
         // MultiThreader
-        Thread thread = new Thread(MultiThreader.WriteThreadId);
-        Thread thread1 = new(MultiThreader.WriteThreadId);
-        thread.Priority = ThreadPriority.Highest;
-        thread.Priority = ThreadPriority.Lowest;
-        Thread.CurrentThread.Priority = ThreadPriority.Normal;
-        thread.Start();
-        thread1.Start();
-        // Current thread
-        MultiThreader.WriteThreadId();
+        int[] array = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+        int sum1 = 0, sum2 = 0, sum3 = 0, sum4 = 0;
+        var startTime = DateTime.Now;
+        int threadCount = 4;
+        int segmentLength = array.Length / threadCount;
+
+        Thread[] threads = new Thread[threadCount];
+        threads[0] = new Thread(() => { sum1 = MultiThreader.SumSegment(array, 0, segmentLength); });
+        threads[1] = new Thread(() => { sum2 = MultiThreader.SumSegment(array, segmentLength, 2 * segmentLength); });
+        threads[2] = new Thread(() =>
+        {
+            sum3 = MultiThreader.SumSegment(array, 2 * segmentLength, 3 * segmentLength);
+        });
+        threads[3] = new Thread(() => { sum4 = MultiThreader.SumSegment(array, 3 * segmentLength, array.Length); });
+        foreach (Thread thread in threads)
+        {
+            thread.Start();
+        }
+
+        foreach (Thread thread in threads)
+        {
+            thread.Join();
+        }
+
+        var timespan = DateTime.Now - startTime;
+        Console.WriteLine(sum1 + sum2 + sum3 + sum4);
+        Console.WriteLine($"Done in time {timespan.TotalMilliseconds}");
         continue;
     }
+
     if (Enum.TryParse(typeof(Patterns), input, out var pattern))
     {
         Console.WriteLine(pattern);
