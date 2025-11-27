@@ -1,4 +1,5 @@
 ﻿using design_patterns.Interfaces;
+using design_patterns.MultiThreading;
 using design_patterns.Patterns;
 
 while (true)
@@ -7,6 +8,7 @@ while (true)
                       Press 0 for the Factory pattern
                       Press 1 for the Builder pattern
                       Press 2 for the Strategy pattern
+                      Press M for the MultiThreader
                       Press Q to quit
                       """);
     var input = Console.ReadLine();
@@ -18,6 +20,20 @@ while (true)
 
     if (input.ToLower() == "q")
         return;
+    if (input.ToLower() == "m")
+    {
+        // MultiThreader
+        Thread thread = new Thread(MultiThreader.WriteThreadId);
+        Thread thread1 = new(MultiThreader.WriteThreadId);
+        thread.Priority = ThreadPriority.Highest;
+        thread.Priority = ThreadPriority.Lowest;
+        Thread.CurrentThread.Priority = ThreadPriority.Normal;
+        thread.Start();
+        thread1.Start();
+        // Current thread
+        MultiThreader.WriteThreadId();
+        continue;
+    }
     if (Enum.TryParse(typeof(Patterns), input, out var pattern))
     {
         Console.WriteLine(pattern);
