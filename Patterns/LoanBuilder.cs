@@ -1,12 +1,16 @@
 using System.Numerics;
-using System;
 using design_patterns.Interfaces;
 
 namespace design_patterns.Patterns;
 
 public class LoanBuilder : ILoanBuilder
 {
-    private readonly Loan _loan = new Loan();
+    private Loan _loan = new Loan();
+
+    public void Reset()
+    {
+        _loan = new Loan();
+    }
 
     public ILoanBuilder SetType(LoanType type)
     {
@@ -20,16 +24,22 @@ public class LoanBuilder : ILoanBuilder
         return this;
     }
 
-    public ILoanBuilder SetAmount(BigInteger amount)
+    public ILoanBuilder SetAmount(long amount)
     {
         _loan.Amount = amount;
         return this;
     }
 
-    public ILoanBuilder SetInterestRate(InterestRateType interestRateType, double interestRate)
+    public ILoanBuilder SetInterestRate(InterestRateType interestRateType, decimal interestRate)
     {
         _loan.InterestRateType = interestRateType;
         _loan.InterestRate = interestRate;
+        return this;
+    }
+
+    public ILoanBuilder SetMonthVariance(decimal monthVariance)
+    {
+        _loan.MonthVariance = monthVariance;
         return this;
     }
 
@@ -43,15 +53,17 @@ public class Loan
 {
     public LoanType LoanType { get; set; }
     public InterestRateType InterestRateType { get; set; }
-    public double InterestRate { get; set; }
-    public BigInteger Amount { get; set; }
+    public decimal InterestRate { get; set; }
+    public decimal MonthVariance { get; set; } = 0m;
+    public long Amount { get; set; }
+    public DateTime StartDate { get; set; } = DateTime.UtcNow;
     public Term Term { get; set; }
 
     public void Summarise()
     {
         Console.WriteLine($@"
         Loan Type: {Enum.Format(typeof(LoanType), LoanType, "G")}
-        Interest Rate: {Enum.Format(typeof(InterestRateType), InterestRateType, "G")} {InterestRate}%
+        Interest Rate: {Enum.Format(typeof(InterestRateType), InterestRateType, "G")} {InterestRate}% with {MonthVariance} variance per month
         Amount: £{Amount}
         Term: {Term.Years} years and  {Term.Months} months
 ");

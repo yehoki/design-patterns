@@ -6,8 +6,9 @@ namespace design_patterns.Interfaces;
 public interface ILoanBuilder
 {
     ILoanBuilder SetType(LoanType type);
-    ILoanBuilder SetAmount(BigInteger amount);
+    ILoanBuilder SetAmount(long amount);
     ILoanBuilder SetTerm(int years, int months);
-    ILoanBuilder SetInterestRate(InterestRateType interestRateType, double interestRate);
+    ILoanBuilder SetInterestRate(InterestRateType interestRateType, decimal interestRate);
+    ILoanBuilder SetMonthVariance(decimal monthVariance);
     Loan Build();
 }
