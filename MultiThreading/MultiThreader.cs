@@ -33,7 +33,7 @@ public class MultiThreader
         Thread monitoringThread = new Thread(MonitorQueue);
         monitoringThread.Start(requestQueue);
         while (true)
-        {   
+        {
             string? input = Console.ReadLine();
             if (input?.ToLower() == "exit")
                 break;
@@ -69,5 +69,51 @@ public class MultiThreader
     {
         Thread.Sleep(2000);
         Console.WriteLine($"Processed input {input}");
+    }
+
+    public static void SetupIncrementerBlocking()
+    {
+        int counter = 0;
+        Thread thread1 = new(Increment);
+        Thread thread2 = new(Increment);
+        thread1.Start();
+        thread2.Start();
+
+        thread1.Join();
+        thread2.Join();
+        Console.WriteLine($"Counter value is currently at: {counter}");
+
+        void Increment()
+        {
+            for (int i = 0; i < 100000; i++)
+            {
+                counter++;
+            }
+        }
+    }
+
+    public static void SetupIncrementerNonBlocking()
+    {
+        int counter = 0;
+        Lock counterLock = new();
+        Thread thread1 = new(Increment);
+        Thread thread2 = new(Increment);
+        thread1.Start();
+        thread2.Start();
+
+        thread1.Join();
+        thread2.Join();
+        Console.WriteLine($"Counter value is currently at: {counter}");
+
+        void Increment()
+        {
+            for (int i = 0; i < 100000; i++)
+            {
+                lock (counterLock)
+                {
+                    counter++;
+                }
+            }
+        }
     }
 }

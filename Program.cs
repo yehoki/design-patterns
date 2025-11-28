@@ -25,7 +25,11 @@ while (true)
         // MultiThreader
         
         // Web Server setup
-        MultiThreader.SetupWebServer();
+        // MultiThreader.SetupWebServer();
+        
+        // Incrementer
+        MultiThreader.SetupIncrementerBlocking();
+        MultiThreader.SetupIncrementerNonBlocking();
         continue;
     }
 
